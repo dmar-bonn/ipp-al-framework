@@ -1,0 +1,3 @@
+[submodule "bayesian_erfnet"]
+	path = bayesian_erfnet
+	url = git@github.com:dmar-bonn/bayesian_erfnet.git

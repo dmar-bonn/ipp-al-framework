@@ -1,0 +1,106 @@
+mapper:
+  map_name: 'rit18'
+  map_boundary: [3257, 7091] # [w, h] pixel, rit18: [3257, 7091], potsdam: [6000, 6000]
+  ground_resolution: [0.08, 0.08] # rit18: 0.08, potsdam: 0.15, flightmare: 0.08333
+  class_number: 6
+  map_continuous_sensor_stream: false
+
+simulator:
+  name: 'rit18'
+  task: 'classification' # classification
+
+  ###------ potsdam simulator ------###
+  potsdam:
+    path_to_orthomosaic: worlds/potsdam/RGB
+    path_to_anno: worlds/potsdam/Labels/semantic_segmentation
+    # -----------------------
+    # please refer to https://www2.isprs.org/commissions/comm2/wg4/benchmark/2d-sem-label-potsdam/
+    # -----------------------  
+    ortho_tile_list: [['2_10', '2_11', '2_12'],
+                     ['3_10', '3_11', '3_12'],
+                     ['4_10', '4_11', '4_12']]
+    resize_flag: true
+    resize_factor: 3 # ratio to original tile
+    gsd: 0.15 # original tile has 6000 x 6000 with 0.05 meter/pixel gsd
+    world_range: [6000, 6000] # [w, h] pixel
+    sensor:
+      resolution: [400, 400] # [w, h] pixel
+      angle: [45, 45] # [w, h] degree
+      frequency: 0.2 # [Hz]
+
+  ###------ Flightmare simulator ------###
+  flightmare:
+    gsd: 0.08333 # meter/pixel gsd at 30m altitude
+    world_range: [6000, 6000] # [w, h] pixel
+    sensor:
+      resolution: [720, 480] # [w, h] pixel
+      angle: [45, 30] # [w, h] degree
+      frequency: 0.2 # [Hz]
+    
+  ###------ rit18 simulator ------###
+  rit18:
+    path_to_orthomosaic: worlds/rit18/rgb_ortho.png
+    path_to_anno: worlds/rit18/anno_ortho.png
+    resize_flag: false
+    resize_factor: 1 # ratio to original tile
+    gsd: 0.08
+    world_range: [3257, 7091] # [w, h] pixel
+    sensor:
+      resolution: [400, 400] # [w, h] pixel
+      angle: [45, 45] # [w, h] degree
+      frequency: 0.2 # [Hz]
+
+network:
+  path_to_config: bayesian_erfnet/agri_semantics/config/rit_merged.yaml
+  path_to_checkpoint: bayesian_erfnet/agri_semantics/models/pretrained/erfnet_all_05_cityscapes.ckpt
+
+notifications:
+  telegram:
+    is_used: false
+    verbose: true
+  slack:
+    is_used: true
+    verbose: true
+    icon: ":robot_face:"
+
+planner:
+  objective_fn: "uncertainty" # representation, uncertainty
+  score_fn:
+    name: "cosine_distance" # cosine_similarity, cosine_distance, euclidean_distance
+    mode: "density" # mean, maximum, density
+    params:
+      knn_number: 20
+      distance_based: true
+  uav_specifications:
+    max_v: 2.0
+    max_a: 2.0
+  informed_map_prior: true
+  num_missions: 10
+  budget: 400.0 # rit18: 400, potsdam: 1800
+  altitude: 15.0
+  type: "coverage" # coverage, local_image, frontier, cmaes, discrete_mcts, local_random, global_random
+  coverage:
+    step_sizes: [15.0, 30.0, 45.0]
+  local_random:
+    step_size: 25.0
+  global_random:
+    min_radius: 15.0
+    max_radius: 45.0
+  cmaes:
+    lattice_step_size: 10.0
+    horizon_length: 5
+    max_iter: 45
+    population_size: 12
+    sigma0: [ 7.5, 7.5, 0.01 ]
+  frontier:
+    step_size: 50
+  local_image:
+    step_size: 12.5
+    edge_width: 10
+  discrete_mcts:
+    discount_factor: 0.99
+    exploration_constant: 4.0
+    eps_greedy_prob: 0.0
+    num_simulations: 1000
+    horizon_length: 5
+    step_sizes: [15.0, 35.0, 60.0, 90.0, 125.0]
