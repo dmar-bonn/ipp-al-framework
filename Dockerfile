@@ -37,7 +37,7 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends libgoogle-glog-dev protobuf-compiler ros-$ROS_DISTRO-octomap-msgs ros-$ROS_DISTRO-octomap-ros ros-$ROS_DISTRO-joy python3-vcstool python3-catkin-tools && \
     rm -rf /var/lib/apt/lists/*
 
-RUN echo "export FLIGHTMARE_PATH=/active_learning_ipp_extension/flightmare_ws/src/flightmare" >> ~/.bashrc
+RUN echo "export FLIGHTMARE_PATH=/ipp-al-framework/flightmare_ws/src/flightmare" >> ~/.bashrc
 
 COPY flightmare_ws/ /flightmare_ws/
 RUN cd /flightmare_ws/ && catkin config --init --mkdirs --extend /opt/ros/$ROS_DISTRO --merge-devel --cmake-args -DCMAKE_BUILD_TYPE=Release

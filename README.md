@@ -88,8 +88,8 @@ Learn how to setup your own Slack webhook [here](https://api.slack.com/messaging
 
 1. Clone repo and initialize submodules:
 ```commandline
-git clone git@github.com:juliusrueckin/active_learning_ipp_extension.git
-cd active_learning_ipp_extension
+git clone git@github.com:dmar-bonn/ipp-al-framework.git
+cd ipp-al-framework
 git submodule update --init
 pip3 install -r bayesian_erfnet/requirements.txt
 pip3 install -r requirements.txt
@@ -126,8 +126,8 @@ Create directory for this project in current working directory and clone this re
 ```commandline
 mkdir tro_project
 cd tro_project
-git clone --recurse-submodules git@gitlab.igg.uni-bonn.de:popoviclab/active_learning_ipp_extension.git
-cd active_learning_ipp_extension/
+git clone --recurse-submodules git@github.com:dmar-bonn/ipp-al-framework.git
+cd ipp-al-framework/
 ```
 
 Create ROS workspace for our fork of the [UZH Flightmare simulator](https://github.com/uzh-rpg/flightmare):
@@ -150,12 +150,12 @@ Download orthomosaics, generated train-val-test splits, and pretrained ERFNet:
 
 Run planning pipeline in a docker container with NVIDIA GPU acceleration:
 ```commandline
-docker run --rm --gpus all -v $(pwd):/active_learning_ipp_extension/ -it al_ipp:extension bash -c "cd /active_learning_ipp_extension/ && source source_envs.sh && python3 main.py"
+docker run --rm --gpus all -v $(pwd):/ipp-al-framework/ -it al_ipp:extension bash -c "cd /ipp-al-framework/ && source source_envs.sh && python3 main.py --config_file config/<CONFIG-FILE>.yaml"
 ```
 
 or without NVIDIA GPU acceleration:
 ```commandline
-docker run --rm -v $(pwd):/active_learning_ipp_extension/ -it al_ipp:extension bash -c "cd /active_learning_ipp_extension/ && source source_envs.sh && python3 main.py"
+docker run --rm -v $(pwd):/ipp-al-framework/ -it al_ipp:extension bash -c "cd /ipp-al-framework/ && source source_envs.sh && python3 main.py --config_file config/<CONFIG-FILE>.yaml"
 ```
 
 The pipeline executes the number of missions specified in *config/config.yaml*.
