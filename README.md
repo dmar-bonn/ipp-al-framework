@@ -130,17 +130,17 @@ git clone --recurse-submodules git@github.com:dmar-bonn/ipp-al-framework.git
 cd ipp-al-framework/
 ```
 
-Create ROS workspace for our fork of the [UZH Flightmare simulator](https://github.com/uzh-rpg/flightmare):
+Create ROS workspace for the [UZH Flightmare simulator](https://github.com/uzh-rpg/flightmare):
 ```commandline
 mkdir -p flightmare_ws/src/
 cd flightmare_ws/src/
-git clone git@gitlab.igg.uni-bonn.de:popoviclab/flightmare.git
+git clone git@github.com:uzh-rpg/flightmare.git
 ```
 
 Build docker image for this project:
 ```commandline
 cd ../../
-docker build -t al_ipp:extension .
+docker build -t al_ipp:framework .
 ```
 
 Download orthomosaics, generated train-val-test splits, and pretrained ERFNet:
@@ -150,12 +150,12 @@ Download orthomosaics, generated train-val-test splits, and pretrained ERFNet:
 
 Run planning pipeline in a docker container with NVIDIA GPU acceleration:
 ```commandline
-docker run --rm --gpus all -v $(pwd):/ipp-al-framework/ -it al_ipp:extension bash -c "cd /ipp-al-framework/ && source source_envs.sh && python3 main.py --config_file config/<CONFIG-FILE>.yaml"
+docker run --rm --gpus all -v $(pwd):/ipp-al-framework/ -it al_ipp:framework bash -c "cd /ipp-al-framework/ && source source_envs.sh && python3 main.py --config_file config/<CONFIG-FILE>.yaml"
 ```
 
 or without NVIDIA GPU acceleration:
 ```commandline
-docker run --rm -v $(pwd):/ipp-al-framework/ -it al_ipp:extension bash -c "cd /ipp-al-framework/ && source source_envs.sh && python3 main.py --config_file config/<CONFIG-FILE>.yaml"
+docker run --rm -v $(pwd):/ipp-al-framework/ -it al_ipp:framework bash -c "cd /ipp-al-framework/ && source source_envs.sh && python3 main.py --config_file config/<CONFIG-FILE>.yaml"
 ```
 
 The pipeline executes the number of missions specified in *config/config.yaml*.
