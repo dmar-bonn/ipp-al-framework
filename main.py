@@ -29,6 +29,46 @@ def read_config_files(config_file_path: str) -> Tuple[Dict, Dict]:
     return cfg, model_cfg
 
 
+def get_starting_pose(simulator_name: str, altitude: float, starting_position: str) -> np.array:
+    if simulator_name == "potsdam":
+        if starting_position == "top_left":
+            x_pos, y_pos = 30, 30
+        elif starting_position == "top_right":
+            x_pos, y_pos = 870, 30
+        elif starting_position == "bottom_left":
+            x_pos, y_pos = 30, 870
+        elif starting_position == "bottom_right":
+            x_pos, y_pos = 870, 870
+        else:
+            raise ValueError(f"Starting position '{starting_position}' not found!")
+    elif simulator_name == "rit18":
+        if starting_position == "top_left":
+            x_pos, y_pos = 16, 16
+        elif starting_position == "top_right":
+            x_pos, y_pos = 245, 16
+        elif starting_position == "bottom_left":
+            x_pos, y_pos = 16, 550
+        elif starting_position == "bottom_right":
+            x_pos, y_pos = 245, 550
+        else:
+            raise ValueError(f"Starting position '{starting_position}' not found!")
+    elif simulator_name == "flightmare":
+        if starting_position == "top_left":
+            x_pos, y_pos = 20, 15
+        elif starting_position == "top_right":
+            x_pos, y_pos = 130, 15
+        elif starting_position == "bottom_left":
+            x_pos, y_pos = 20, 115
+        elif starting_position == "bottom_right":
+            x_pos, y_pos = 130, 115
+        else:
+            raise ValueError(f"Starting position '{starting_position}' not found!")
+    else:
+        raise ValueError(f"Simulator '{simulator_name}' not found!")
+
+    return np.array([x_pos, y_pos, altitude], dtype=np.float32)
+
+
 @click.command()
 @click.option(
     "--config_file",
@@ -44,15 +84,6 @@ def main(config_file: str):
     logger = Logger(experiment_name, cfg, model_cfg)
     logger.save_config_files_to_disk(cfg, model_cfg)
 
-    if cfg["simulator"]["name"] == "potsdam":
-        init_pose = np.array([30, 30, cfg["planner"]["altitude"]], dtype=np.float32)
-    elif cfg["simulator"]["name"] == "rit18":
-        init_pose = np.array([16, 16, cfg["planner"]["altitude"]], dtype=np.float32)
-    elif cfg["simulator"]["name"] == "flightmare":
-        init_pose = np.array([20, 15, cfg["planner"]["altitude"]], dtype=np.float32)
-    else:
-        raise ValueError(f"Simulator '{cfg['simulator']['name']}' not found!")
-
     simulator = get_simulator(cfg)
     learner = get_learner(model_cfg, cfg["network"]["path_to_checkpoint"], logger.logger_name, model_id="0")
     trained_model = learner.setup_model()
@@ -61,6 +92,10 @@ def main(config_file: str):
         notifier.start_experiment()
 
     try:
+        init_pose = get_starting_pose(
+            cfg["simulator"]["name"], cfg["planner"]["altitude"], cfg["planner"]["starting_position"]
+        )
+
         for mission_id in range(cfg["planner"]["num_missions"]):
             mapper = get_mapper(cfg, model_cfg)
             planner = get_planner(cfg, mapper, mission_id=mission_id)

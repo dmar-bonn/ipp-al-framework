@@ -78,6 +78,7 @@ planner:
   num_missions: 10
   budget: 1800.0
   altitude: 30.0
+  starting_position: "top_left" # top_left, top_right, bottom_left, bottom_right
   type: "coverage" # coverage, local_image, frontier, cmaes, discrete_mcts, local_random, global_random
   coverage:
     step_sizes: [30.0, 50.0, 70.0]

@@ -78,6 +78,7 @@ planner:
   num_missions: 10
   budget: 400.0 # rit18: 400, potsdam: 1800
   altitude: 15.0
+  starting_position: "top_left" # top_left, top_right, bottom_left, bottom_right
   type: "coverage" # coverage, local_image, frontier, cmaes, discrete_mcts, local_random, global_random
   coverage:
     step_sizes: [15.0, 30.0, 45.0]
@@ -95,7 +96,7 @@ planner:
   frontier:
     step_size: 50
   local_image:
-    step_size: 12.5
+    step_size: 25.0
     edge_width: 10
   discrete_mcts:
     discount_factor: 0.99
@@ -103,4 +104,4 @@ planner:
     eps_greedy_prob: 0.0
     num_simulations: 1000
     horizon_length: 5
-    step_sizes: [15.0, 35.0, 60.0, 90.0, 125.0]
+    step_sizes: [20.0, 45.0, 85.0, 110.0, 150.0]
