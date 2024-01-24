@@ -31,11 +31,14 @@ map-based planners outperform state-of-the-art local planning.
 
 If you found this work useful for your own research, feel free to cite it.
 ```commandline
-@article{ruckin2023informativeframework,
-  title={{An Informative Path Planning Framework for Active Learning in UAV-based Semantic Mapping}},
-  author={R{\"u}ckin, Julius and Magistri, Federico and Stachniss, Cyrill and Popovi{\'c}, Marija},
-  journal={arXiv preprint arXiv:2302.03347},
+@article{ruckin2023informative,
+  author={R{\"u}ckin, Julius and Magistri, Federico and Stachniss, Cyrill and Popović, Marija},
+  journal=tro, 
+  title={{An Informative Path Planning Framework for Active Learning in UAV-Based Semantic Mapping}}, 
   year={2023},
+  volume={39},
+  number={6},
+  pages={4279-4296}
 }
 ```
 
