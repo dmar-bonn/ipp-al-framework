@@ -33,7 +33,7 @@ If you found this work useful for your own research, feel free to cite it.
 ```commandline
 @article{ruckin2023informative,
   author={R{\"u}ckin, Julius and Magistri, Federico and Stachniss, Cyrill and Popović, Marija},
-  journal=tro, 
+  journal={IEEE Trans.~on Robotics (TRO)}, 
   title={{An Informative Path Planning Framework for Active Learning in UAV-Based Semantic Mapping}}, 
   year={2023},
   volume={39},
